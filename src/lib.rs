@@ -1,7 +1,7 @@
 use crate::errors::ClientError::*;
 use crate::errors::ClientResult;
 
-use chrono::{Date,DateTime,NaiveDate,NaiveDateTime};
+use chrono::{DateTime,NaiveDateTime};
 use chrono::offset::Utc;
 use regex::Regex;
 use serde::{Serialize, Deserialize, de};
@@ -66,94 +66,94 @@ impl TryFrom<&str> for StatusCode {
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Place {
-    address: Address,
+    pub address: Address,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Address {
-    country_code: Option<String>,
-    postal_code: Option<String>,
-    address_locality: Option<String>,
-    street_address: Option<String>,
+    pub country_code: Option<String>,
+    pub postal_code: Option<String>,
+    pub address_locality: Option<String>,
+    pub street_address: Option<String>,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ShipmentEvent {
     #[serde(deserialize_with = "deserialize_dhl_datetime")]
-    timestamp: DateTime<Utc>,
-    location: Option<Place>,
+    pub timestamp: DateTime<Utc>,
+    pub location: Option<Place>,
     #[serde(deserialize_with = "deserialize_status_code")]
     #[serde(default)] // this fellow allows serde not to panick if the field is missing
-    status_code: Option<StatusCode>,
-    description: Option<String>,
-    remark: Option<String>,
-    next_steps: Option<String>,
+    pub status_code: Option<StatusCode>,
+    pub description: Option<String>,
+    pub remark: Option<String>,
+    pub next_steps: Option<String>,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ShipmentDetails {
-    carrier: Option<Organization>,
-    product: Option<Product>,
-    receiver: Option<Person>,
-    sender: Option<Person>,
-    proof_of_delivery: ProofOfDelivery,
-    total_number_of_pieces: u32,
-    piece_ids: Vec<String>,
+    pub carrier: Option<Organization>,
+    pub product: Option<Product>,
+    pub receiver: Option<Person>,
+    pub sender: Option<Person>,
+    pub proof_of_delivery: ProofOfDelivery,
+    pub total_number_of_pieces: u32,
+    pub piece_ids: Vec<String>,
 }
 
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Product {
-    description: String,
-    product_name: String,
+    pub description: String,
+    pub product_name: String,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProofOfDelivery {
-    document_url: String,
+    pub document_url: String,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Person {
-    family_name: String,
-    given_name: String,
-    name: String,
+    pub family_name: String,
+    pub given_name: String,
+    pub name: String,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Organization {
-    description: String,
-    organization_name: String,
+    pub description: String,
+    pub organization_name: String,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Shipment {
-    id: String,
+    pub id: String,
     #[serde(deserialize_with = "deserialize_service")]
-    service: Service,
-    origin: Option<Place>,
-    destination: Option<Place>,
-    status: ShipmentEvent,
+    pub service: Service,
+    pub origin: Option<Place>,
+    pub destination: Option<Place>,
+    pub status: ShipmentEvent,
     #[serde(deserialize_with = "deserialize_dhl_date")]
-    estimated_time_of_delivery: DateTime<Utc>,
-    estimated_time_of_delivery_remark: Option<String>,
-    details: ShipmentDetails,
-    events: Vec<ShipmentEvent>,
+    pub estimated_time_of_delivery: DateTime<Utc>,
+    pub estimated_time_of_delivery_remark: Option<String>,
+    pub details: ShipmentDetails,
+    pub events: Vec<ShipmentEvent>,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Response {
-    shipments: Vec<Shipment>,
-    possible_additional_shipments_url: Vec<String>,
+    pub shipments: Vec<Shipment>,
+    pub possible_additional_shipments_url: Vec<String>,
 }
 
 fn deserialize_service<'de ,D>(deserializer: D) -> Result<Service, D::Error>
